@@ -1,0 +1,10 @@
+.idea
+composer.lock
+*.log
+thinkphp
+runtime
+.project
+.buildpath
+README.md
+.settings
+
