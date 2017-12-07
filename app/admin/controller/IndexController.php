@@ -1,0 +1,18 @@
+<?php
+namespace app\admin\controller;
+
+use think\Controller;
+
+class IndexController extends Controller
+{
+    //系统首页
+    public function index()
+    {
+        return $this->fetch();
+    }
+    //菜单默认页
+    public function default(){
+
+        return $this->fetch();
+    }
+}
