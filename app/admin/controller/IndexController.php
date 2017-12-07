@@ -12,7 +12,6 @@ class IndexController extends Controller
     }
     //菜单默认页
     public function default(){
-
         return $this->fetch();
     }
 }
