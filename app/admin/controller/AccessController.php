@@ -93,4 +93,9 @@ class AccessController extends TemplateController
         return   $this->fetch();
 
     }
+    public function abc(){
+        return true;
+
+
+    }
 }
