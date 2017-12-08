@@ -12,6 +12,7 @@
     <link href="__static__/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
     <link href="__static__/css/animate.min.css" rel="stylesheet">
     <link href="__static__/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <script src="__static__/plugins/layui/layui.all.js"></script>
 </head>
 
 <body class="gray-bg">
@@ -42,7 +43,7 @@
                     </div>
                     <div class="ibox-content">
                         <div class="">
-                            <a onclick="clickadd();" href="javascript:void(0);" class="btn btn-primary glyphicon glyphicon-plus ">添加菜单</a>
+                            <a onclick="layer_show('添加菜单','{:url('access/add')}')" href="javascript:void(0);" class="btn btn-primary glyphicon glyphicon-plus ">添加菜单</a>
                         </div>
                         <table class="table table-striped table-bordered table-hover " id="editable">
                             <thead>
@@ -99,6 +100,18 @@
         	oTable.$("td").editable("http://www.zi-han.net/theme/example_ajax.php",
         			{"callback":function(sValue,y){var aPos=oTable.fnGetPosition(this);oTable.fnUpdate(sValue,aPos[0],aPos[1])},"submitdata":function(value,settings){return{"row_id":this.parentNode.getAttribute("id"),"column":oTable.fnGetPosition(this)[2]}},"width":"90%","height":"100%"})});function fnClickAddRow(){$("#editable").dataTable().fnAddData(["Custom row","New row","New row","New row","New row"])};
     </script>
+<script type="text/javascript">
+function layer_show(title,url){
+    layer.open({
+        type: 2,//类型
+        title: title,
+        anim: 4,//打开方式
+        maxmin: true, //开启最大化最小化按钮
+        area: ['1000px', '800px'],
+        content:url
+      });
 
+}
+</script>
 </body>
 </html>
