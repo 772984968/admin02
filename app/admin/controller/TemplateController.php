@@ -68,32 +68,55 @@ use think\console\Input;
     abstract function getTitle();
     /*显示添加的字段
      *  $roles=Db('role')->field('id,name')->select();
-        return [
-            ['key'=>'username','title'=>'用户名','value'=>'','html'=>'text','option'=>''],
-            ['key'=>'password','title'=>'密码','value'=>'','html'=>'text','option'=>''],
-            ['key'=>'password','title'=>'确认密码','value'=>'','html'=>'text','option'=>''],
-            ['key'=>'is_admin','title'=>'是否管理员','value'=>'','html'=>'radio','option'=>['1'=>'是','0'=>'否']],
-            ['key'=>'state','title'=>'状态','value'=>'','html'=>'radio','option'=>['1'=>'正常','0'=>'禁用']],
-            ['key'=>'role_id','title'=>'所属用户组','value'=>'','html'=>'select','option'=>$roles],
-       ];
+       return [
+            ['key'=>'password','title'=>'密码','value'=>'','html'=>'password','option'=>['placeholder'=>'请输入密码']],
+            ['key'=>'wenben','title'=>'普通文本','value'=>'','html'=>'text','option'=>''],
+            ['key'=>'city','title'=>'城市','value'=>'','html'=>'select','option'=>[
+                ['id'=>0,'name'=>'北京'],
+                ['id'=>1,'name'=>'上海'],
+                ['id'=>2,'name'=>'广州'],
+                ['id'=>3,'name'=>'深圳'],
+                ['id'=>4,'name'=>'杭州'],
+                ['id'=>5,'name'=>'南宁'],
+                ]
+            ],
+            ['key'=>'radio','title'=>'性别','value'=>'','html'=>'radio','option'=>[
+                ['id'=>0,'name'=>'男'],
+                ['id'=>1,'name'=>'女','check'=>'checked'],
+
+            ]
+            ],
+            ['key'=>'data','title'=>'日期','value'=>'','html'=>'date','option'=>''],
+            ['key'=>'checkebox','title'=>'兴趣','value'=>'','html'=>'checkbox','option'=>[
+                ['id'=>0,'name'=>'写作'],
+                ['id'=>1,'name'=>'阅读','check'=>'checked'],
+                ['id'=>2,'name'=>'发呆'],
+            ]],
+            ['key'=>'switch','title'=>'开关','value'=>'','html'=>'switch','option'=>
+                [
+
+                ]
+            ],
+            ['key'=>'textarea','title'=>'文本框','value'=>'','html'=>'textarea','option'=>''],
+        ];
      */
     abstract  function getOption();
     //添加
     public function add(){
         if ($this->request->isAjax()){
+            return  json(['code'=>200,'msg'=>'添加成功']);
            $model=new $this->config['modelName'];
+
            if($model->allowField(true)->save(input('post.'))){
              return  json(['code'=>200,'msg'=>'添加成功']);
-
            }else{
                 return json(['code'=>400,'msg'=>$model->getError]);
            }
-
         }
-        $data=$this->getData();
         $data['option']=$this->getOption();
+        $data['config']=$this->config;//获取配置
         $this->assign('data',$data);
-       return   $this->fetch('./template/add');
+        return   $this->fetch('./template/add');
 
     }
 
