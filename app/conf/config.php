@@ -238,4 +238,22 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+    //验证码配置
+    'captcha'  => [
+        // 字体大小
+        'fontSize' => 20,
+        //验证码高度
+        'imageH'=>40,
+        //验证码宽度
+        'imageW'=>140,
+        // 验证码长度（位数）
+        'length'   => 4,
+        //是否添加杂点
+        'useNoise'=>false,
+        //验证码字符集
+        'codeSet'=>'123567890',
+        // 是否画混淆曲线
+        'useCurve' => false,
+    ],
+
 ];

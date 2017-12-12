@@ -15,7 +15,7 @@ class BaseController extends Controller
 {
 
     public  function _initialize(){
-        /*if (session('username')==''||session('adminId')==''){
+        if (session('username')==''||session('adminId')==''){
            self::error('您未登陆或登陆过期，请重新登陆','login/index');
         }
         //权限认证
@@ -34,7 +34,6 @@ class BaseController extends Controller
          }else{
            $menu=Db('access')->select();
          }
-         */
          //管理员生成全部菜单
         $menu=Db('access')->select();
         $list=[];

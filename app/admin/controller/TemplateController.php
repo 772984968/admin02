@@ -41,8 +41,9 @@ use think\console\Input;
     // 设置首页的字段
     public function getData()
     {
-        $data['title']=$this->getTitle();// 标题
-        $data['config']=$this->config;//获取配置
+        $data['title']=json_encode($this->getTitle());// 标题
+       // $data['config']=$this->config;//获取配置
+      // var_dump(json_encode($this->getField()));die;
         $data['attribute']=$this->getField();// 获取属性
         return $data;
 
@@ -50,8 +51,20 @@ use think\console\Input;
 
     // 获取字段
    public function getField(){
-       $model=new $this->config['modelName'];
-       return $model::field($this->config['field'])->select();
+       $data=[
+           ['id'=>'10001','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+           ['id'=>'10002','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+           ['id'=>'10003','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+           ['id'=>'10004','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+           ['id'=>'10005','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+           ['id'=>'10006','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+           ['id'=>'10007','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+           ['id'=>'10008','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+           ['id'=>'10009','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+           ['id'=>'100010','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+
+       ];
+       return json(['code'=>0,'msg'=>'','count'=>10,'data'=>$data]);
 
    }
 

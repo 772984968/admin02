@@ -33,33 +33,36 @@ class AdminController extends TemplateController
 
       ];
 
+
       // 显示首页
       public function index()
       {
+
           $this->assign('data',$this->getData());
           return $this->fetch();
       }
+/*
     // 获取字段
     public function getField()
     {
-        $model=new $this->config['modelName'];
-        return $model::field($this->config['field'])->paginate();
-    }
 
+    }
+*/
     //获取标题
     public function getTitle()
     {
-    return [
-        'ID',
-        '登录名称',
-        '所属用户组',
-        '是否管理员 ',
-        '注册时间',
-        '更新时间',
-        '状态',
-        '操作',
-    ];
-
+        return [[
+            ['type'=>'checkbox'],
+            ['field'=>'id','title'=>'ID','sort'=>'true'],
+            ['field'=>'username','title'=>'用户名'],
+            ['field'=>'sex','title'=>'性别','sort'=>true],
+            ['field'=>'city','title'=>'城市'],
+            ['field'=>'sign','title'=>'签名'],
+            ['field'=>'experience','title'=>'积分','sort'=>true],
+            ['field'=>'ip','title'=>'ip地址','sort'=>true],
+            ['field'=>'logins','title'=>'logins','sort'=>true],
+            ['field'=>'right','title'=>'数据操作','align'=>'center','toolbar'=>'#barDemo','width'=>300],
+        ]];
     }
 
     //添加修改中定主的字段
@@ -84,7 +87,6 @@ class AdminController extends TemplateController
             $result = $this->validate($data,'Admin.add');
             if(true !== $result){
                 return json(['code'=>400,'msg'=>$result]);
-
             }
             $data['password']=md5($data['password']);
             if($model->allowField(true)->save($data)){
@@ -103,7 +105,6 @@ class AdminController extends TemplateController
     }
     //编辑
     public function edit(){
-
         $model=new $this->config['modelName'];
         if ($this->request->isAjax()){
             $data=input('post.');

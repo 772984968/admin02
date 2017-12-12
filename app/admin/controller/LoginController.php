@@ -33,7 +33,7 @@ class LoginController extends Controller
        session('username',$rs->username);
        session('adminId',$rs->id);
        //添加登录日志
-       \app\common\model\AdminLog::log();
+  //     \app\common\model\AdminLog::log();
         return json([
                 'code' => 200,
                 'msg' => '登陆成功',
