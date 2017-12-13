@@ -35,7 +35,7 @@ class BaseController extends Controller
            $menu=Db('access')->select();
          }
          //管理员生成全部菜单
-        $menu=Db('access')->select();
+     //   $menu=Db('access')->select();
         $list=[];
         foreach ($menu as $key=>$vo){
             if ($vo['pid']==0){

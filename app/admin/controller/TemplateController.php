@@ -30,6 +30,15 @@ use think\console\Input;
       ];
  */
 
+     //取搜索框字段
+     protected function getSearch()
+     {
+        return[
+            ['field'=>'id','name'=>'ID查询'],
+        ];
+
+     }
+
 
     // 显示首页
     public function index()
@@ -42,29 +51,26 @@ use think\console\Input;
     public function getData()
     {
         $data['title']=json_encode($this->getTitle());// 标题
-       // $data['config']=$this->config;//获取配置
-      // var_dump(json_encode($this->getField()));die;
-        $data['attribute']=$this->getField();// 获取属性
+        $data['config']=$this->config;//获取配置
+        $data['search']=$this->getSearch();//获取查询
         return $data;
 
     }
 
     // 获取字段
    public function getField(){
-       $data=[
-           ['id'=>'10001','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
-           ['id'=>'10002','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
-           ['id'=>'10003','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
-           ['id'=>'10004','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
-           ['id'=>'10005','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
-           ['id'=>'10006','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
-           ['id'=>'10007','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
-           ['id'=>'10008','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
-           ['id'=>'10009','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
-           ['id'=>'100010','username'=>'杜甫','sex'=>'男','city'=>'浙江杭州','experience'=>'116','ip'=>'192.168.0.8','logins'=>108,'sign'=>'人生恰似一场修行'],
+       $model=new $this->config['modelName'];
+       $page=input('page')??'1';
+       $limit=input('limit')??'10';
+       $where=[];
+       if (input('id')!=null){
+           $paramas=input('id');
+           $where['id']=['like','%'.$paramas.'%'];
+       }
+          $paginate=$model::field($this->config['field'])->where($where)->paginate($limit,false,['page'=>$page]);
+           $data=$paginate->toArray();
+           return json(['code'=>0,'msg'=>'','count'=>$data['total'],'data'=>$data['data']]);
 
-       ];
-       return json(['code'=>0,'msg'=>'','count'=>10,'data'=>$data]);
 
    }
 
@@ -138,7 +144,7 @@ use think\console\Input;
         $model=new $this->config['modelName'];
         $ids[]=$this->request->post('id');
         if($model::destroy($ids)){
-            return  json(['code'=>200,'msg'=>'添加成功']);
+            return  json(['code'=>200,'msg'=>'删除成功']);
         }else{
             return json(['code'=>400,'msg'=>$model->getError]);
         }

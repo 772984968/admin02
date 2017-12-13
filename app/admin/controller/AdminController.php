@@ -6,6 +6,7 @@ use think\Controller;
 use think\App;
 use app\common\model\Admin;
 use app\common\model\Role;
+use think\console\Input;
 
 
 
@@ -24,43 +25,26 @@ class AdminController extends TemplateController
             'state'
         ], // 查询的字段
         'bars' => [
-            'head' => '管理员管理',
-            'title' => '管理员列表'
+            'title' => '管理员列表',
+            'url'=>'admin/getfield',
         ],//标题
         'add'=>['title'=>'添加管理员','url'=>'admin/add'],
         'del'=>['title'=>'删除管理员','url'=>'admin/del'],
         'edit'=>['title'=>'编辑管理员','url'=>'admin/edit'],
 
       ];
-
-
-      // 显示首页
-      public function index()
-      {
-
-          $this->assign('data',$this->getData());
-          return $this->fetch();
-      }
-/*
-    // 获取字段
-    public function getField()
-    {
-
-    }
-*/
     //获取标题
     public function getTitle()
     {
         return [[
             ['type'=>'checkbox'],
             ['field'=>'id','title'=>'ID','sort'=>'true'],
-            ['field'=>'username','title'=>'用户名'],
-            ['field'=>'sex','title'=>'性别','sort'=>true],
-            ['field'=>'city','title'=>'城市'],
-            ['field'=>'sign','title'=>'签名'],
-            ['field'=>'experience','title'=>'积分','sort'=>true],
-            ['field'=>'ip','title'=>'ip地址','sort'=>true],
-            ['field'=>'logins','title'=>'logins','sort'=>true],
+            ['field'=>'username','title'=>'登录名称'],
+            ['field'=>'role_id','title'=>'所属用户组','sort'=>true],
+            ['field'=>'is_admin','title'=>'是否管理员'],
+            ['field'=>'reg_time','title'=>'注册时间'],
+            ['field'=>'update_time','title'=>'更新时间','sort'=>true],
+            ['field'=>'state','title'=>'状态','sort'=>true],
             ['field'=>'right','title'=>'数据操作','align'=>'center','toolbar'=>'#barDemo','width'=>300],
         ]];
     }
@@ -70,15 +54,41 @@ class AdminController extends TemplateController
     {
         $roles=Db('role')->field('id,name')->select();
         return [
-            ['key'=>'username','title'=>'用户名','value'=>'','html'=>'text','option'=>''],
+            ['key'=>'username','title'=>'用户名','value'=>'','html'=>'text','option'=>['placeholder'=>'请输入用户名']],
             ['key'=>'password','title'=>'密码','value'=>'','html'=>'password','option'=>''],
             ['key'=>'repassword','title'=>'确认密码','value'=>'','html'=>'password','option'=>''],
-            ['key'=>'is_admin','title'=>'是否管理员','value'=>'','html'=>'radio','option'=>['1'=>'是','0'=>'否']],
-            ['key'=>'state','title'=>'状态','value'=>'','html'=>'radio','option'=>['1'=>'正常','0'=>'禁用']],
+            ['key'=>'is_admin','title'=>'是否管理员','value'=>'','html'=>'radio','option'=>[
+                ['id'=>1,'name'=>'是','check'=>'checked'],
+                ['id'=>0,'name'=>'否']]
+            ],
+            ['key'=>'state','title'=>'状态','value'=>'','html'=>'radio','option'=>[
+                ['id'=>1,'name'=>'正常','check'=>'checked'],
+                ['id'=>0,'name'=>'禁用']]
+            ],
             ['key'=>'role_id','title'=>'所属用户组','value'=>'','html'=>'select','option'=>$roles],
-       ];
+        ];
     }
 
+    // 获取字段
+    public function getField(){
+        $model=new $this->config['modelName'];
+        $page=input('page')??'1';
+        $limit=input('limit')??'10';
+        $where=[];
+        if (input('id')!=null){
+            $paramas=input('id');
+            $where['id']=['like','%'.$paramas.'%'];
+        }
+        if (input('username')!=null){
+            $paramas=input('username');
+            $where['username']=['like','%'.$paramas.'%'];
+        }
+        $paginate=$model::field($this->config['field'])->where($where)->paginate($limit,false,['page'=>$page])->each(function($item, $key){
+            return $item['role_id']=$item['role']['name'];
+        });
+        $data=$paginate->toArray();
+        return json(['code'=>0,'msg'=>'','count'=>$data['total'],'data'=>$data['data']]);
+    }
     //添加
     public function add(){
         if ($this->request->isAjax()){
@@ -104,6 +114,7 @@ class AdminController extends TemplateController
 
     }
     //编辑
+
     public function edit(){
         $model=new $this->config['modelName'];
         if ($this->request->isAjax()){
@@ -130,7 +141,7 @@ class AdminController extends TemplateController
             $option=$this->getOption();
             foreach ($option as $key=>$vo){
                 if (isset($attribute[$vo['key']])){
-                    $option[$key]['value']=$attribute[$vo['key']];
+                    $option[$key]['value']=$attribute->getData($vo['key']);
                 }
 
             }
@@ -141,4 +152,5 @@ class AdminController extends TemplateController
             return $this->fetch('./template/edit');
 
     }
+
 }
