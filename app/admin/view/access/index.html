@@ -3,15 +3,14 @@
 <head>
    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>菜单列表</title>
+    <title>{$data['config']['bars']['title']}</title>
     <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
     <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
-    <link rel="shortcut icon" href="favicon.ico"> <link href="__static__/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+      <link rel="shortcut icon" href="favicon.ico"> <link href="__static__/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
     <link href="__static__/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
-    <!-- Data Tables -->
-    <link href="__static__/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
     <link href="__static__/css/animate.min.css" rel="stylesheet">
     <link href="__static__/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="__static__/plugins/layui/css/layui.css" rel="stylesheet">
     <script src="__static__/plugins/layui/layui.all.js"></script>
 </head>
 
@@ -22,7 +21,7 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>可编辑表格</h5>
+                        <h5>{$data['config']['bars']['title']}</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -42,64 +41,47 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <div class="">
-                            <a onclick="layer_show('添加菜单','{:url('access/add')}')" href="javascript:void(0);" class="btn btn-primary glyphicon glyphicon-plus ">添加菜单</a>
-                        </div>
-                        <table class="table table-striped table-bordered table-hover " id="editable">
-                            <thead>
-                                <tr>
-                                {volist name="data['title']" id="vo"}
-                                    <th>{$vo}</th>
-                                    {/volist}
-                                </tr>
-                            </thead>
-                            <tbody>
-                            	{volist name="data['attribute']" id="vo"}
-                                <tr class="gradeA">
-                                	<td>{$vo['id']}</td>
-                                	<td>{$vo['level']}{$vo['title']}</td>
-                                	<td>{$vo['url']}</td>
-                                	<td>{$vo['pid']}</td>
-                                	<td>{$vo['state']}</td>
-                                	<td>{$vo['class']}</td>
-                                	<td></td>
-                                </tr>
-                                {/volist}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    {volist name="data['title']" id="vo"}
-                                    <th>{$vo}</th>
-                                    {/volist}
-                                </tr>
-                            </tfoot>
-                        </table>
+                    {notempty name="$data['config']['add']['url']"}
 
-                    </div>
+
+                        <div class="">
+                            <a onclick="layer_show('{$data['config']['add']['title']}','{:url($data['config']['add']['url'])}')" href="javascript:void(0);" class="btn btn-primary glyphicon glyphicon-plus ">{$data['config']['add']['title']}</a>
+                        </div>
+  					 {/notempty}
+  					  {notempty name="$data['search']"}
+                     <div class="demoTable">  搜索：
+ <div class="layui-input-inline" >
+					<select name="search" lay-verify="" class="layui-input">
+					{volist name="$data['search']" id='vo'}
+						<option value="{$vo['field']}">{$vo['name']}</option>
+						{/volist}
+					</select>
+</div>
+  <div class="layui-inline">
+    <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+  </div>
+ <button class="layui-btn" data-type="reload">搜索</button>
+
+</div>
+ {/notempty}
+                        <table class="layui-hide" id="demo" lay-filter="basedemo"></table>
+<script type="text/html" id="barDemo">
+                  <!--  <a class="layui-btn layui-btn-primary layui-btn-xs lay-event="detail">查看</a>-->
+                   {notempty name="$data['config']['edit']['url']"}
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+ {/notempty}
+     {notempty name="$data['config']['del']['url']"}
+                    <a class="layui-btn layui-btn-xs layui-btn-danger  layui-btn-mini" lay-event="del">删除</a>
+	 {/notempty}
+</script>
                 </div>
             </div>
         </div>
     </div>
     <script src="__static__/js/jquery.min.js?v=2.1.4"></script>
     <script src="__static__/js/bootstrap.min.js?v=3.3.6"></script>
-   <script src="__static__/js/plugins/jeditable/jquery.jeditable.js"></script>
-     <script src="__static__/js/plugins/dataTables/jquery.dataTables.js"></script>
-    <script src="__static__/js/plugins/dataTables/dataTables.bootstrap.js"></script>
     <script src="__static__/js/content.min.js?v=1.0.0"></script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-    	$('#editable').DataTable();
-    	}
-    );
-    </script>
-   <script>
-        $(document).ready(function(){
-        	$(".dataTables-example").dataTable();
 
-        	var oTable=$("#editable").dataTable();
-        	oTable.$("td").editable("http://www.zi-han.net/theme/example_ajax.php",
-        			{"callback":function(sValue,y){var aPos=oTable.fnGetPosition(this);oTable.fnUpdate(sValue,aPos[0],aPos[1])},"submitdata":function(value,settings){return{"row_id":this.parentNode.getAttribute("id"),"column":oTable.fnGetPosition(this)[2]}},"width":"90%","height":"100%"})});function fnClickAddRow(){$("#editable").dataTable().fnAddData(["Custom row","New row","New row","New row","New row"])};
-    </script>
 <script type="text/javascript">
 function layer_show(title,url){
     layer.open({
@@ -112,6 +94,84 @@ function layer_show(title,url){
       });
 
 }
+</script>
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+  //监听工具条
+  table.on('tool(basedemo)', function(obj){
+    var data = obj.data;
+    if(obj.event === 'detail'){
+      layer.msg('ID：'+ data.id + ' 的查看操作');
+    } else if(obj.event === 'del'){
+      layer.confirm('真的删除行么', function(index){
+    	  //向服务端发送删除指令
+    	  $.ajax({
+    	    url:"{:url($data['config']['del']['url'])}",
+    		type:'POST',
+    		dataType:'json',
+    		data:{
+    			id:data.id
+    		},
+    		 success:function(data){
+    			 if(data.code=='200'){
+    					layer.msg(data.msg,{icon:1,time:1*1000},function(){
+    						  obj.del();
+    					layer.close(index);
+    					});
+    				}else{
+    					layer.msg(data.msg,{icon:5});
+
+    				}
+             },
+             error:function(data){
+            	 layer.msg('数据发送失败',{icon:5});
+             }
+
+    	  });
+
+      });
+    } else if(obj.event === 'edit'){
+    	  {notempty name="$data['config']['edit']['url']"}
+    	layer_show("{$data['config']['edit']['title']}","{:url($data['config']['edit']['url'])}"+'?'+'id='+data.id)
+    	    //  layer.alert('编辑行：<br>'+ JSON.stringify(data))
+    	     {/notempty}
+    }
+  });
+  //搜索重载
+  $('.demoTable .layui-btn').on('click', function(){
+	 var options=$("select[name='search']").val();
+	  var values=$("#demoReload").val();
+	  //方法重载
+	    table.reload('testReload', {
+	      where: {
+	       //设定异步数据接口的额外参数，任意设
+			[options]:values,
+	      }
+	      ,page: {
+	        curr: 1 //重新从第 1 页开始
+	      }
+	      ,page:false
+	    });
+	  });
+
+  //展示已知数据
+  table.render({
+    elem: '#demo'
+     ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+     ,url:'{:url($data['config']['bars']['url'])}'
+     //,width:1000//表格宽度
+    ,cols:{$data['title']}
+  	,id:'testReload'
+    //,skin: 'line' //表格风格
+    ,even: true
+    ,page: false //是否显示分页
+    //,limits: [5, 7, 10]
+    ,limit: 10 //每页默认显示的数量
+    ,loading:true//是否出现加载条
+
+  });
+});
 </script>
 </body>
 </html>

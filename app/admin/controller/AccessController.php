@@ -20,21 +20,24 @@ class AccessController extends TemplateController
             'class',
 
         ], // 查询的字段
-        'add'=>['title'=>'添加菜单','url'=>'Access/add'],
-        'del'=>['title'=>'删除删除权限','url'=>'Access/del'],
+        'bars' => [
+            'title' => '权限管理',
+            'url'=>'access/getfield',
+        ],
+        'add'=>['title'=>'添加权限菜单','url'=>'Access/add'],
+        'edit'=>['title'=>'编辑权限','url'=>'Access/edit'],
+        'del'=>['title'=>'删除权限','url'=>'Access/del'],
     ];
 
+    //取搜索框字段
+    protected function getSearch()
+    {
+    }
     // 显示首页
     public function index()
     {
         $this->assign('data',$this->getData());
         return $this->fetch();
-    }
-    // 获取字段
-    public function getField(){
-        $model=new $this->config['modelName'];
-        $data=$model::field($this->config['field'])->select();
-         return tree($data);
     }
 
 
@@ -42,6 +45,9 @@ class AccessController extends TemplateController
     {
         $data=Db('access')->field('pid,id,title as name')->select();
         $data=tree($data);
+        foreach ($data as $key=>$vo){
+            $data[$key]['name']=$vo['level'].$vo['name'];
+        }
         array_unshift($data,['id'=>0,'name'=>'顶级菜单','level'=>'']);
         return [
             ['key'=>'title','title'=>'菜单标题','value'=>'','html'=>'text','option'=>['placeholder'=>'请输入菜单标题']],
@@ -63,38 +69,34 @@ class AccessController extends TemplateController
 
     public function getTitle()
     {
-
-        return [
-            'ID',
-            '权限标题',
-            '权限URL',
-            '上级ID',
-            '状态',
-            '菜单等级',
-            '操作',
-        ];
-
-
+        return [[
+            ['type'=>'checkbox'],
+            ['field'=>'id','title'=>'ID','sort'=>'true'],
+            ['field'=>'title','title'=>'权限标题'],
+            ['field'=>'url','title'=>'权限URL','sort'=>true],
+            ['field'=>'pid','title'=>'上级ID'],
+            ['field'=>'class','title'=>'菜单等级'],
+            ['field'=>'state','title'=>'状态','sort'=>true],
+            ['field'=>'right','title'=>'数据操作','align'=>'center','toolbar'=>'#barDemo','width'=>300],
+        ]];
     }
 
-    //添加
-    public function add(){
-        if ($this->request->isAjax()){
-            $model=new $this->config['modelName'];
-            var_dump(input('post.'));
-            die();
-            if($model->allowField(true)->save(input('post.'))){
-                return  json(['code'=>200,'msg'=>'添加成功']);
-
-            }else{
-                return json(['code'=>400,'msg'=>$model->getError]);
-            }
-
+    // 获取字段
+    public function getField(){
+        $model=new $this->config['modelName'];
+        $where=[];
+        if (input('id')!=null){
+            $paramas=input('id');
+            $where=['id'=>$paramas];
         }
-        $data['option']=$this->getOption();
-        $data['config']=$this->config;//获取配置
-        $this->assign('data',$data);
-        return   $this->fetch();
+       $paginate=$model->field($this->config['field'])->where($where)->select();
+        $data=tree($paginate);
+        foreach ($data as $key=>$vo){
+            $data[$key]['title']=$vo['level'].$vo['title'];
+        }
+        return json(['code'=>0,'msg'=>'','count'=>$model->count(),'data'=>$data]);
+
 
     }
+
 }

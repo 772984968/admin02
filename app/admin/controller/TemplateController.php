@@ -20,9 +20,10 @@ use think\console\Input;
             'status'
         ], // 查询的字段
         'bars' => [
-            'head' => '管理员管理',
-            'title' => '管理员列表'
-        ],//标题
+            'title' => '管理员列表',
+            'url'=>'admin/getfield',
+        ],
+        //标题
         'add'=>['title'=>'添加管理员','url'=>'admin/add'],
         'del'=>['title'=>'删除管理员','url'=>'admin/del'],
         'edit'=>['title'=>'编辑管理员','url'=>'admin/edit'],
@@ -33,10 +34,11 @@ use think\console\Input;
      //取搜索框字段
      protected function getSearch()
      {
+/*
         return[
             ['field'=>'id','name'=>'ID查询'],
         ];
-
+*/
      }
 
 
@@ -73,17 +75,19 @@ use think\console\Input;
 
 
    }
-
-   /* 显示的标题 return [
-   'ID',
-   '登录名称',
-   '所属用户组',
-   '是否管理员 ',
-   '注册时间',
-   '更新时间',
-   '状态',
-   '操作',
-   ];*/
+/*
+   return [[
+       ['type'=>'checkbox'],
+       ['field'=>'id','title'=>'ID','sort'=>'true'],
+       ['field'=>'username','title'=>'登录名称'],
+       ['field'=>'role_id','title'=>'所属用户组','sort'=>true],
+       ['field'=>'is_admin','title'=>'是否管理员'],
+       ['field'=>'reg_time','title'=>'注册时间'],
+       ['field'=>'update_time','title'=>'更新时间','sort'=>true],
+       ['field'=>'state','title'=>'状态','sort'=>true],
+       ['field'=>'right','title'=>'数据操作','align'=>'center','toolbar'=>'#barDemo','width'=>300],
+   ]];
+   */
     abstract function getTitle();
     /*显示添加的字段
      *  $roles=Db('role')->field('id,name')->select();
@@ -123,9 +127,7 @@ use think\console\Input;
     //添加
     public function add(){
         if ($this->request->isAjax()){
-            return  json(['code'=>200,'msg'=>'添加成功']);
            $model=new $this->config['modelName'];
-
            if($model->allowField(true)->save(input('post.'))){
              return  json(['code'=>200,'msg'=>'添加成功']);
            }else{
@@ -169,7 +171,7 @@ use think\console\Input;
             $option=$this->getOption();
         foreach ($option as $key=>$vo){
             if (isset($attribute[$vo['key']])){
-                $option[$key]['value']=$attribute[$vo['key']];
+                $option[$key]['value']=$attribute->getData($vo['key']);
             }
 
         }

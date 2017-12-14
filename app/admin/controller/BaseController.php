@@ -16,7 +16,7 @@ class BaseController extends Controller
 
     public  function _initialize(){
         if (session('username')==''||session('adminId')==''){
-           self::error('您未登陆或登陆过期，请重新登陆','login/index');
+            self::redirect('login/index','','400');
         }
         //权限认证
         $auth=Factory::getRbac();

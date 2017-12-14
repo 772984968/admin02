@@ -33,6 +33,15 @@ class AdminController extends TemplateController
         'edit'=>['title'=>'编辑管理员','url'=>'admin/edit'],
 
       ];
+    //取搜索框字段
+    protected function getSearch()
+    {
+        return[
+            ['field'=>'id','name'=>'ID查询'],
+            ['field'=>'username','name'=>'名称查询']
+        ];
+
+    }
     //获取标题
     public function getTitle()
     {
@@ -119,17 +128,18 @@ class AdminController extends TemplateController
         $model=new $this->config['modelName'];
         if ($this->request->isAjax()){
             $data=input('post.');
-            $result = $this->validate($data,'Admin.add');
+            $result = $this->validate($data,'Admin.edit');
             if(true !== $result){
                 return json(['code'=>400,'msg'=>$result]);
 
             }
             $admin=$model::get(['id'=>$data['id']]);
+
             if ($admin->password!=$data['password']){
                 $data['password']=md5($data['password']);
             }
             if($model->allowField(true)->isUpdate(true)->save($data)){
-                return  json(['code'=>200,'msg'=>'添加成功']);
+                return  json(['code'=>200,'msg'=>'编辑成功']);
             }else{
                 return json(['code'=>400,'msg'=>$model->getError]);
             }
