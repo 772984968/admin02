@@ -26,11 +26,13 @@ class AdminController extends TemplateController
         ], // 查询的字段
         'bars' => [
             'title' => '管理员列表',
-            'url'=>'admin/getfield',
+            'url'=>'admin/index',
         ],//标题
         'add'=>['title'=>'添加管理员','url'=>'admin/add'],
         'del'=>['title'=>'删除管理员','url'=>'admin/del'],
         'edit'=>['title'=>'编辑管理员','url'=>'admin/edit'],
+        'delall'=>['title'=>'批量删除','url'=>'admin/delall'],
+
 
       ];
     //取搜索框字段

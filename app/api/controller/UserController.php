@@ -27,4 +27,11 @@ class UserController extends BaseController
             $this->jsonSuccess('用户登录成功','200',$data);
         }
  }
+ //用户退出
+ public function logout(){
+    session(null);
+    $this->jsonSuccess('用户退出成功','200');
+ }
+
+
 }

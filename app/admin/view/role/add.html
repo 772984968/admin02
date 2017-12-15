@@ -48,91 +48,67 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <form class="form-horizontal">
+                        <form class="form-horizontal" method="post" action="{:url('role/add')}" id="form-admin-role-add">
                             <p>添加管理员角色(⊙o⊙)</p>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">用户名：</label>
+                                <label class="col-sm-3 control-label">角色名称：</label>
 
                                 <div class="col-sm-8">
-                                    <input type="email" placeholder="用户名" class="form-control"> <span class="help-block m-b-none">请输入您注册时所填的E-mail</span>
+                                    <input type="text" placeholder="请填写角色名称" class="form-control" name="name">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">密码：</label>
-
+                                <label class="col-sm-3 control-label">备注：</label>
                                 <div class="col-sm-8">
-                                    <input type="password" placeholder="密码" class="form-control">
+                                    <input type="text" placeholder="角色描述" class="form-control" name="remark">
                                 </div>
                             </div>
+                               <div class="form-group">
+                                <label class="col-sm-3 control-label">状态：</label>
+                                <div class="col-sm-8">
+                                <input type="radio" name="state" value="1" checked="checked">正常<input type="radio" name="state" value="0">禁用
+                                </div>
+                            </div>
+                            <div class="form-group">
+                             <label class="col-sm-3 control-label">权限管理：</label>
+                            <div class="col-sm-offset-3 col-sm-8">
+{volist name="menu" id="vo"}
+<dl class="permission-list">
+					<dt>
+							<span style="font-size: 15px;">{$vo['title']}</span>
+							<input type="checkbox" value="{$vo['id']}" name="access_ids[]">
 
+					</dt>
+			{volist name="$vo['son']" id="voo"}
+					<dd>
+						<dl class="cl permission-list2 dl-horizontal">
+							<dt>
+								{$voo['title']}
+									<input type="checkbox" value="{$voo['id']}" name="access_ids[]" >
+
+							</dt>
+							<dd>
+{volist name="$voo['son']" id="vooo"}
+									{$vooo['title']}
+									<input type="checkbox" value="{$vooo['id']}" name="access_ids[]">
+
+{/volist}
+							</dd>
+						</dl>
+					</dd>
+		{/volist}
+		</dl>
+{/volist}
+                             </div>
+                            </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-sm-8">
-                                    <button class="btn btn-sm btn-white" type="submit">登 录</button>
+                                    <button class="btn btn-bg btn-white" type="submit" lay-filter="formDemo" onclick="ajaxsubmit();">添加</button>
+                                      <button class="btn btn-bg btn-white" type="reset">重置</button>
                                 </div>
                             </div>
+
                         </form>
-                          <div >
-                                <label class="col-sm-3 control-label">权限管理：</label>
-
-                                <div class="col-sm-8">
-<dl>
-  <dt>Description 1</dt>
-  <dd><dl class="dl-horizontal">
-  <dt>Description 1</dt>
-  <dd>Item 1</dd>
-  <dt>Description 2</dt>
-  <dd>Item 2</dd>
-</dl></dd>
-  <dt>Description 2</dt>
-  <dd><dl class="dl-horizontal">
-  <dt>Description 1</dt>
-  <dd>Item 1</dd>
-  <dt>Description 2</dt>
-  <dd>Item 2</dd>
-</dl></dd>
-</dl>
-                                </div>
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-form" class="modal fade" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6 b-r">
-                            <h3 class="m-t-none m-b">登录</h3>
-
-                            <p>欢迎登录本站(⊙o⊙)</p>
-
-                            <form role="form">
-                                <div class="form-group">
-                                    <label>用户名：</label>
-                                    <input type="email" placeholder="请输入用户名" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>密码：</label>
-                                    <input type="password" placeholder="请输入密码" class="form-control">
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>登录</strong>
-                                    </button>
-                                    <label>
-                                        <input type="checkbox" class="i-checks">自动登录</label>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-sm-6">
-                            <h4>还不是会员？</h4>
-                            <p>您可以注册一个账户</p>
-                            <p class="text-center">
-                                <a href="form_basic.html"><i class="fa fa-sign-in big-icon"></i></a>
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -140,14 +116,63 @@
     </div>
     <script src="__static__/js/jquery.min.js?v=2.1.4"></script>
     <script src="__static__/js/bootstrap.min.js?v=3.3.6"></script>
-    <script src="__static__/js/content.min.js?v=1.0.0"></script>
-    <script src="__static__/js/plugins/iCheck/icheck.min.js"></script>
-    <script>
-        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})});
-    </script>
-    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+     <script src="__static__/plugins/layui/layui.all.js"></script>
+     <script src="__static__/js/plugins/validate/jquery.validate.min.js"></script>
+     <script src="__static__/js/plugins/validate/messages_zh.min.js"></script>
+     <script src="__static__/js/plugins/validate/jquery.form.js"></script>
+<script type="text/javascript">
+$(function(){
+	$(".permission-list dt input:checkbox").click(function(){
+		$(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
+	});
+	$(".permission-list2 dd input:checkbox").click(function(){
+		var l =$(this).parent().parent().find("input:checked").length;
+		var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
+		if($(this).prop("checked")){
+			$(this).closest("dl").find("dt input:checkbox").prop("checked",true);
+			$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
+		}
+		else{
+			if(l==0){
+				$(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+			}
+			if(l2==0){
+				$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
+			}
+		}
+	});
+
+
+	$("#form-admin-role-add").validate({
+		rules:{
+			name:{
+				required:true,
+			},
+			remark:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({success: function(data){
+				if(data.code=='200'){
+					layer.msg(data.msg,{icon:1,time:1*1000},function(){
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+					});
+				}else{
+					layer.msg(data.msg,{icon:5});
+
+				}
+				 $(form).resetForm(); // 提交后重置表单
+			}});
+
+		}
+	});
+
+});
+</script>
 </body>
-
-
-<!-- Mirrored from www.zi-han.net/theme/hplus/form_basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:19:15 GMT -->
 </html>

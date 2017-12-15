@@ -23,9 +23,11 @@ class BaseController extends Controller
         $rules=request()->controller().'/'.request()->action();
         $system=config('system');
         if (!in_array($rules,$system['url'])){
-            if (!$auth->check($rules, session('adminId')))
-            self::error('对不起,您没有权限','index/welcome');
+            if (!$auth->check($rules, session('adminId'))){
+                $this->redirect('index/outerror');
+            }
          }
+ //        var_dump($rules);
          //根据权限生成菜单
          $admin=$auth->getAdmin(session('adminId'));
          if ($admin['is_admin']!=1){
@@ -35,7 +37,6 @@ class BaseController extends Controller
            $menu=Db('access')->select();
          }
          //管理员生成全部菜单
-     //   $menu=Db('access')->select();
         $list=[];
         foreach ($menu as $key=>$vo){
             if ($vo['pid']==0){
@@ -43,7 +44,7 @@ class BaseController extends Controller
                $list[]=$vo;
             }
         }
-      //  $auth->addLog();
+        $auth->addLog();
         self::assign('menu',$list);
     }
 

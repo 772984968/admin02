@@ -51,7 +51,7 @@
 				<div class="layui-input-block">
 					{volist name="vo['option']" id="radio"}
 					 <input type="radio"	name="{$vo['key']}" value="{$radio['id']}"
-					 {$vo['value']}
+
 						title="{$radio['name']}" {eq name="$radio['id']" value="$vo['value']"} checked="checked" {/eq}> {/volist}
 				</div>
 			</div>

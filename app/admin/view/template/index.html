@@ -42,8 +42,6 @@
                     </div>
                     <div class="ibox-content">
                     {notempty name="$data['config']['add']['url']"}
-
-
                         <div class="">
                             <a onclick="layer_show('{$data['config']['add']['title']}','{:url($data['config']['add']['url'])}')" href="javascript:void(0);" class="btn btn-primary glyphicon glyphicon-plus ">{$data['config']['add']['title']}</a>
                         </div>
@@ -63,6 +61,11 @@
  <button class="layui-btn" data-type="reload">搜索</button>
 
 </div>
+ {/notempty}
+    {notempty name="$data['config']['delall']['url']"}
+   <div  class="layui-btn-group demoTable2">
+   <button class="layui-btn layui-btn-danger" data-type="getCheckData">{$data['config']['delall']['title']}</button>
+   </div>
  {/notempty}
                         <table class="layui-hide" id="demo" lay-filter="basedemo"></table>
 <script type="text/html" id="barDemo">
@@ -105,6 +108,7 @@ layui.use('table', function(){
       layer.msg('ID：'+ data.id + ' 的查看操作');
     } else if(obj.event === 'del'){
       layer.confirm('真的删除行么', function(index){
+    	   {notempty name="$data['config']['del']['url']"}
     	  //向服务端发送删除指令
     	  $.ajax({
     	    url:"{:url($data['config']['del']['url'])}",
@@ -129,6 +133,7 @@ layui.use('table', function(){
              }
 
     	  });
+    	  {/notempty}
 
       });
     } else if(obj.event === 'edit'){
@@ -138,6 +143,39 @@ layui.use('table', function(){
     	     {/notempty}
     }
   });
+  {notempty name="$data['config']['delall']['url']"}
+  //批量删除
+   $('.demoTable2 .layui-btn').on('click', function(){
+	   var checkStatus = table.checkStatus('testReload')
+	      ,data = checkStatus.data;
+	   if(data!=''){
+	      $.ajax({
+	    	    url:"{:url($data['config']['delall']['url'])}",
+	    		type:'POST',
+	    		dataType:'json',
+	    		data:{
+	    			data:JSON.stringify(data),
+	    		},
+	    		 success:function(data){
+	    			 if(data.code=='200'){
+	    					layer.msg(data.msg,{icon:1,time:1*1000},function(){
+	    					location.replace(location.href);
+	    					layer.close(index);
+	    					});
+	    				}else{
+	    					layer.msg(data.msg,{icon:5});
+
+	    				}
+	             },
+	             error:function(data){
+	            	 layer.msg('数据发送失败',{icon:5});
+	             }
+
+	    	  });
+	   }
+
+	  });
+   {/notempty}
   //搜索重载
   $('.demoTable .layui-btn').on('click', function(){
 	 var options=$("select[name='search']").val();

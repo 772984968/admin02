@@ -13,11 +13,12 @@ class RoleController extends TemplateController
         'field' =>['id','name','state','access_id','update_time','remark'], // 查询的字段
         'bars' => [
             'title' => '角色管理',
-            'url'=>'role/getfield'
+            'url'=>'role/index'
         ],//标题
         'add'=>['title'=>'添加角色','url'=>'role/add'],
         'del'=>['title'=>'删除角色','url'=>'role/del'],
         'edit'=>['title'=>'编辑角色','url'=>'role/edit'],
+        'delall'=>['title'=>'批量删除','url'=>'role/delall'],
 
     ];
     public function getTitle()
@@ -36,28 +37,14 @@ class RoleController extends TemplateController
     //添加
     public function add(){
         if ($this->request->isAjax()){
-            $model=new $this->config['modelName'];
-            if($model->allowField(true)->save(input('post.'))){
-                return  json(['code'=>200,'msg'=>'添加成功']);
-            }else{
-                return json(['code'=>400,'msg'=>$model->getError]);
-            }
-        }
-        $data['option']=$this->getOption();
-        $data['config']=$this->config;//获取配置
-        $this->assign('data',$data);
-        return   $this->fetch();
-
-    }
-/*
-    //添加
-    public function add(){
-        if ($this->request->isAjax()){
             $data=input('post.');
             $list['name']=$data['name'];
             $list['remark']=$data['remark'];
             $list['state']=$data['state'];
-            $list['access_id']=implode(',',$data['access_ids']);
+            $list['access_id']='';
+            if (isset($data['access_ids'])){
+                $list['access_id']=implode(',',$data['access_ids']);
+            }
             $model=new $this->config['modelName'];
             if($model->allowField(true)->save($list)){
                 return  json(['code'=>200,'msg'=>'添加成功']);
@@ -70,7 +57,7 @@ class RoleController extends TemplateController
         $this->assign('data',$data);
         return   $this->fetch();
 
-    }*/
+    }
     public function getOption()
     {
         return [
@@ -84,7 +71,7 @@ class RoleController extends TemplateController
         ];
 
     }
-    /*
+
     //编辑
     public function edit(){
         $model=new $this->config['modelName'];
@@ -94,7 +81,10 @@ class RoleController extends TemplateController
             $list['name']=$data['name'];
             $list['remark']=$data['remark'];
             $list['state']=$data['state'];
-            $list['access_id']=implode(',',$data['access_ids']);
+            $list['access_id']='';
+            if (isset($data['access_ids'])){
+                $list['access_id']=implode(',',$data['access_ids']);
+            }
             $model=new $this->config['modelName'];
             if($model->allowField(true)->update()->save($list)){
                 return  json(['code'=>200,'msg'=>'添加成功']);
@@ -103,13 +93,13 @@ class RoleController extends TemplateController
             }
 
         }
-        $data=$model->where(['id'=>input('id')])->find();
+        $data=$model->where(['id'=>input('id')])->find()->getData();
         $data['access_id']=explode(',',$data['access_id']);
         $data['config']=$this->config;
         $this->assign('data',$data);
             return $this->fetch();
 
     }
-    */
+
 
 }

@@ -45,6 +45,9 @@ use think\console\Input;
     // 显示首页
     public function index()
     {
+        if ($this->request->isAjax()){
+            return $this->getField();
+        }
         $this->assign('data',$this->getData());
         return $this->fetch('./template/index');
     }
@@ -180,6 +183,28 @@ use think\console\Input;
         $data['config']=$this->config;
         $this->assign('data',$data);
         return $this->fetch('./template/edit');
+
+    }
+
+    //批量删除
+    public  function delAll(){
+        $data=input('post.');
+        foreach ($data as $vo){
+            $data=json_decode($vo);
+        }
+        foreach ($data as $vo){
+            $ids[]=$vo->id;
+        }
+        $model=new $this->config['modelName'];
+        if($model::destroy($ids)){
+            return  json(['code'=>200,'msg'=>'删除成功']);
+        }else{
+            return json(['code'=>400,'msg'=>$model->getError]);
+        }
+
+
+
+
 
     }
  }

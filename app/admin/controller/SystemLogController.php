@@ -21,16 +21,16 @@ class SystemLogController extends TemplateController
      ], // 查询的字段
      'bars' => [
      'title' => '系统管理',
-     'url' => 'SystemLog/getfield'
+     'url' => 'SystemLog/index'
      ],//标题
-     'del'=>['title'=>'删除记录','url'=>'SystemLog/del'],
+    // 'del'=>['title'=>'删除记录','url'=>'SystemLog/del'],
      ];
 
 
     public function getTitle()
     {
         return [[
-         ['type'=>'checkbox'],
+        // ['type'=>'checkbox'],
          ['field'=>'id','title'=>'ID','sort'=>true],
          ['field'=>'admin_username','title'=>'操作用户名'],
          ['field'=>'target_url','title'=>'操作路由'],
@@ -39,7 +39,7 @@ class SystemLogController extends TemplateController
          ['field'=>'ip','title'=>'操作ip'],
          ['field'=>'note','title'=>'备注'],
          ['field'=>'create_time','title'=>'操作时间','sort'=>true],
-         ['field'=>'right','title'=>'数据操作','align'=>'center','toolbar'=>'#barDemo','width'=>300],
+      //   ['field'=>'right','title'=>'数据操作','align'=>'center','toolbar'=>'#barDemo','width'=>300],
          ]];
 
     }

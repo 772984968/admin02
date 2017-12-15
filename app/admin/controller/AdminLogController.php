@@ -19,9 +19,9 @@ class AdminLogController extends TemplateController
      ], // 查询的字段
      'bars' => [
      'title' => '管理员登录日志',
-         'url'=>'adminLog/getfield',
+         'url'=>'adminLog/index',
      ],//标题
-     'del'=>['title'=>'删除管理员日志','url'=>'adminLog/del'],
+   //  'del'=>['title'=>'删除管理员日志','url'=>'adminLog/del'],
      ];
 
     public function getTitle()
@@ -29,12 +29,12 @@ class AdminLogController extends TemplateController
 
 
          return [[
-         ['type'=>'checkbox'],
+      //   ['type'=>'checkbox'],
          ['field'=>'id','title'=>'ID','sort'=>'true'],
          ['field'=>'admin_username','title'=>'登录用户'],
          ['field'=>'ip','title'=>'登录IP'],
              ['field'=>'time','title'=>'登录时间','sort'=>true],
-         ['field'=>'right','title'=>'数据操作','align'=>'center','toolbar'=>'#barDemo','width'=>300],
+     //    ['field'=>'right','title'=>'数据操作','align'=>'center','toolbar'=>'#barDemo','width'=>300],
          ]];
 
     }

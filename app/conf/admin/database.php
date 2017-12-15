@@ -13,5 +13,5 @@ return [
     // 时间字段取出后的默认时间格式
     'datetime_format' => false,
     //	是否需要进行SQL性能分析 开启调试有效
-    'sql_explain'=>true,
+ //   'sql_explain'=>true,
 ];

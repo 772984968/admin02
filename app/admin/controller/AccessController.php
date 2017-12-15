@@ -22,11 +22,12 @@ class AccessController extends TemplateController
         ], // 查询的字段
         'bars' => [
             'title' => '权限管理',
-            'url'=>'access/getfield',
+            'url'=>'access/index',
         ],
         'add'=>['title'=>'添加权限菜单','url'=>'Access/add'],
         'edit'=>['title'=>'编辑权限','url'=>'Access/edit'],
         'del'=>['title'=>'删除权限','url'=>'Access/del'],
+        'delall'=>['title'=>'批量删除','url'=>'Access/delall'],
     ];
 
     //取搜索框字段
@@ -36,6 +37,9 @@ class AccessController extends TemplateController
     // 显示首页
     public function index()
     {
+        if ($this->request->isAjax()){
+                return $this->getField();
+        }
         $this->assign('data',$this->getData());
         return $this->fetch();
     }
@@ -57,7 +61,7 @@ class AccessController extends TemplateController
             ['key'=>'class','title'=>'菜单等级','value'=>'','html'=>'radio','option'=>[
                 ['id'=>0,'name'=>'一级菜单','check'=>'checked'],
                 ['id'=>1,'name'=>'二级菜单'],
-                ['id'=>0,'name'=>'三级菜单'],
+                ['id'=>2,'name'=>'三级菜单'],
             ]],
            ['key'=>'state','title'=>'状态','value'=>'','html'=>'radio','option'=>[
                ['id'=>1,'name'=>'正常','check'=>'checked'],
@@ -95,8 +99,6 @@ class AccessController extends TemplateController
             $data[$key]['title']=$vo['level'].$vo['title'];
         }
         return json(['code'=>0,'msg'=>'','count'=>$model->count(),'data'=>$data]);
-
-
     }
 
 }
