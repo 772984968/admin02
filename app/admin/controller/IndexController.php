@@ -9,10 +9,12 @@ class IndexController extends BaseController
     {
         return $this->fetch();
     }
+    /*
     //菜单默认页
     public function default(){
         return $this->fetch();
     }
+    **/
     //菜单默认页
     public function outerror(){
         return $this->fetch();
